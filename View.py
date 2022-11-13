@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'Interfaz.ui'
+# Form implementation generated from reading ui file 'Interfaz'
 #
 # Created by: PyQt6 UI code generator 6.4.0
 #
@@ -10,6 +10,77 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
+    def initializeEditTab(self):
+        self.CrearNodo.setEnabled(False)
+        self.CambiarNombre.setEnabled(False)
+        self.ConectarNodos.setEnabled(False)
+        self.Nombre.textChanged.connect(self.__createActive)
+        
+        self.NuevoNombre.textChanged.connect(self.__changeNameActive)
+        self.NodoCambioNombre.currentIndexChanged.connect(self.__changeNameActive)
+        
+        self.NodoOrigen.currentTextChanged.connect(self.__connectActive)
+        self.NodoDestino.currentTextChanged.connect(self.__connectActive)
+        self.Peso.textChanged.connect(self.__connectActive)
+        self.Peso.setValidator(QtGui.QIntValidator())
+        
+    def initializeDeleteTab(self):
+        self.EliminarNodo.setEnabled(False)
+        self.DesconectarNodos.setEnabled(False)
+        self.NodoEliminar.currentTextChanged.connect(self.__deleteActive)
+        
+        self.NodoConexion1Eliminar.currentTextChanged.connect(self.__disconectActive)
+        self.NodoConexion2Eliminar.currentTextChanged.connect(self.__disconectActive)
+        
+        self.NodoAislar.currentTextChanged.connect(self.__isolateActive)
+
+    def initializeSearchTab(self):
+        self.Buscar.setEnabled(False)
+        self.NodoInicial.currentTextChanged.connect(self.__searchActive)
+        self.NodoObjetivo.currentTextChanged.connect(self.__searchActive)
+        
+    def __createActive(self):
+        if len(self.Nombre.text()):
+            self.CrearNodo.setEnabled(True)
+        else:
+            self.CrearNodo.setEnabled(False)
+
+    def __changeNameActive(self):
+        if len(self.NodoCambioNombre.currentText()) and len(self.NuevoNombre.text()):
+            self.CambiarNombre.setEnabled(True)
+        else:
+            self.CambiarNombre.setEnabled(False)
+
+    def __connectActive(self):
+        if self.NodoOrigen.currentText() != self.NodoDestino.currentText() and len(self.Peso.text()):
+            self.ConectarNodos.setEnabled(True)
+        else:
+            self.ConectarNodos.setEnabled(False)
+
+    def __deleteActive(self):
+        if len(self.NodoEliminar.currentText()):
+            self.EliminarNodo.setEnabled(True)
+        else:
+            self.EliminarNodo.setEnabled(False)
+
+    def __disconectActive(self):
+        if self.NodoConexion1Eliminar.currentText() != self.NodoConexion2Eliminar.currentText():
+            self.DesconectarNodos.setEnabled(True)
+        else:
+            self.DesconectarNodos.setEnabled(False)
+
+    def __isolateActive(self):
+        if len(self.NodoAislar.currentText()):
+            self.Aislar.setEnabled(True)
+        else:
+            self.Aislar.setEnabled(False)
+
+    def __searchActive(self):
+        if self.NodoInicial.currentText() != self.NodoObjetivo.currentText():
+            self.Buscar.setEnabled(True)
+        else:
+            self.Buscar.setEnabled(False)
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1059, 742)
@@ -352,3 +423,6 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Objetivo"))
         self.Buscar.setText(_translate("MainWindow", "Buscar"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Buscar"))
+        self.initializeEditTab()
+        self.initializeDeleteTab()
+        self.initializeSearchTab()

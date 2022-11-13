@@ -27,10 +27,7 @@ class searchingApp(QtWidgets.QMainWindow):
 
         self.ui.Buscar.clicked.connect(self.buscar)
 
-        #iniciar
-        self.initializeEditTab()
-        self.initializeDeleteTab()
-        self.initializeSearchTab()
+        #update data
         self.retrieveData()
 
     def crear(self):
@@ -157,77 +154,6 @@ class searchingApp(QtWidgets.QMainWindow):
     def retrieveData(self):
         self.refreshNodes()
         self.refreshConexiones()
-
-    def initializeEditTab(self):
-        self.ui.CrearNodo.setEnabled(False)
-        self.ui.CambiarNombre.setEnabled(False)
-        self.ui.ConectarNodos.setEnabled(False)
-        self.ui.Nombre.textChanged.connect(self.__createActive)
-        
-        self.ui.NuevoNombre.textChanged.connect(self.__changeNameActive)
-        self.ui.NodoCambioNombre.currentIndexChanged.connect(self.__changeNameActive)
-        
-        self.ui.NodoOrigen.currentTextChanged.connect(self.__connectActive)
-        self.ui.NodoDestino.currentTextChanged.connect(self.__connectActive)
-        self.ui.Peso.textChanged.connect(self.__connectActive)
-        self.ui.Peso.setValidator(QtGui.QIntValidator())
-        
-    def initializeDeleteTab(self):
-        self.ui.EliminarNodo.setEnabled(False)
-        self.ui.DesconectarNodos.setEnabled(False)
-        self.ui.NodoEliminar.currentTextChanged.connect(self.__deleteActive)
-        
-        self.ui.NodoConexion1Eliminar.currentTextChanged.connect(self.__disconectActive)
-        self.ui.NodoConexion2Eliminar.currentTextChanged.connect(self.__disconectActive)
-        
-        self.ui.NodoAislar.currentTextChanged.connect(self.__isolateActive)
-
-    def initializeSearchTab(self):
-        self.ui.Buscar.setEnabled(False)
-        self.ui.NodoInicial.currentTextChanged.connect(self.__searchActive)
-        self.ui.NodoObjetivo.currentTextChanged.connect(self.__searchActive)
-        
-    def __createActive(self):
-        if len(self.ui.Nombre.text()):
-            self.ui.CrearNodo.setEnabled(True)
-        else:
-            self.ui.CrearNodo.setEnabled(False)
-
-    def __changeNameActive(self):
-        if len(self.ui.NodoCambioNombre.currentText()) and len(self.ui.NuevoNombre.text()):
-            self.ui.CambiarNombre.setEnabled(True)
-        else:
-            self.ui.CambiarNombre.setEnabled(False)
-
-    def __connectActive(self):
-        if self.ui.NodoOrigen.currentText() != self.ui.NodoDestino.currentText() and len(self.ui.Peso.text()):
-            self.ui.ConectarNodos.setEnabled(True)
-        else:
-            self.ui.ConectarNodos.setEnabled(False)
-
-    def __deleteActive(self):
-        if len(self.ui.NodoEliminar.currentText()):
-            self.ui.EliminarNodo.setEnabled(True)
-        else:
-            self.ui.EliminarNodo.setEnabled(False)
-
-    def __disconectActive(self):
-        if self.ui.NodoConexion1Eliminar.currentText() != self.ui.NodoConexion2Eliminar.currentText():
-            self.ui.DesconectarNodos.setEnabled(True)
-        else:
-            self.ui.DesconectarNodos.setEnabled(False)
-
-    def __isolateActive(self):
-        if len(self.ui.NodoAislar.currentText()):
-            self.ui.Aislar.setEnabled(True)
-        else:
-            self.ui.Aislar.setEnabled(False)
-
-    def __searchActive(self):
-        if self.ui.NodoInicial.currentText() != self.ui.NodoObjetivo.currentText():
-            self.ui.Buscar.setEnabled(True)
-        else:
-            self.ui.Buscar.setEnabled(False)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
