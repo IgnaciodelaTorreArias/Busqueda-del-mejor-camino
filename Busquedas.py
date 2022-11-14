@@ -8,7 +8,6 @@ class Busqueda:
 
     def visitA(self, id:int, level:int):
         self.toVisit.remove(id)
-        self.minimumDistances[id]['visited'] = True
         
         for nextId, peso in self.repo.whoConnects(id):
             if level+1 < self.minimumDistances[nextId]['weight']:
@@ -17,7 +16,6 @@ class Busqueda:
     
     def visitP(self, id:int, level:int):
         self.toVisit.remove(id)
-        self.minimumDistances[id]['visited'] = True
 
         for nextId, peso in self.repo.whoConnects(id):
             if level+peso < self.minimumDistances[nextId]['weight']:
@@ -30,16 +28,16 @@ class Busqueda:
         fun = self.visitA if not algorithm else self.visitP
         
         self.toVisit:set = set(id for id, peso in self.repo.getNodos())
-        self.minimumDistances = {id:{'weight':maxsize, 'previous':None, 'visited':False} for id, peso in self.repo.getNodos()}
+        self.minimumDistances = {id:{'weight':maxsize, 'previous':None} for id, peso in self.repo.getNodos()}
         self.minimumDistances[origin]['weight'] = 0
 
         fun(origin, self.minimumDistances[origin]['weight'])
         while(len(self.toVisit)):
             minKey = None
             for key, value in self.minimumDistances.items():
-                if minKey == None and not value['visited']:
+                if minKey == None and key in self.toVisit:
                     minKey = key
-                if not value['visited'] and value['weight'] < self.minimumDistances[minKey]['weight']:
+                if key in self.toVisit and value['weight'] < self.minimumDistances[minKey]['weight']:
                     minKey = key
             fun(minKey, self.minimumDistances[minKey]['weight'])
         

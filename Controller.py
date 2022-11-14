@@ -1,6 +1,6 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 import sys
-from mainWindow import Ui_MainWindow
+from View import Ui_MainWindow
 from Repository import Repository
 from Busquedas import Busqueda
 
