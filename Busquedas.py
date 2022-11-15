@@ -5,49 +5,59 @@ from sys import maxsize
 class Busqueda:
     def __init__(self, repo:Repository):
         self.repo = repo
+        self.amplitudPath = dict()
+        self.weightPath = dict()
 
-    def visitA(self, id:int, level:int):
-        self.toVisit.remove(id)
-        
-        for nextId, peso in self.repo.whoConnects(id):
-            if level+1 < self.minimumDistances[nextId]['weight']:
-                self.minimumDistances[nextId]['weight'] = level+1
-                self.minimumDistances[nextId]['previous'] = id
+    def evaluate(self, origin:int):
+        self.amplitudPath =  self.__Explore(origin, self.__visitA)
+        self.weightPath = self.__Explore(origin, self.__visitP)
+
+    def __visitA(self, id:int):
+        self.toVisit.remove(id) #Se marca como visitado
+        level = self.path[id]['weight']
+
+        for nextId, peso in self.repo.whoConnects(id):#Se evaluan los nodos a los que se conecta
+            if level+1 < self.path[nextId]['weight']:#Se intercambia el mejor camino hacia los siguientes nodos, hasta encontrar el minimo
+                self.path[nextId]['weight'] = level+1
+                self.path[nextId]['previous'] = id
     
-    def visitP(self, id:int, level:int):
+    def __visitP(self, id:int):
         self.toVisit.remove(id)
+        level = self.path[id]['weight']
 
         for nextId, peso in self.repo.whoConnects(id):
-            if level+peso < self.minimumDistances[nextId]['weight']:
-                self.minimumDistances[nextId]['weight'] = level+peso
-                self.minimumDistances[nextId]['previous'] = id
+            if level+peso < self.path[nextId]['weight']:
+                self.path[nextId]['weight'] = level+peso
+                self.path[nextId]['previous'] = id
 
-    #type 0:Amplitud
-    #type 1:Peso
-    def Explore(self, algorithm:bool, origin:int):
-        fun = self.visitA if not algorithm else self.visitP
+    def __Explore(self, origin:int, func):
+        self.toVisit:set = set(id for id, peso in self.repo.getNodos()) #Control para evitar bucles
+        self.path = {id:{'weight':maxsize, 'previous':None} for id, peso in self.repo.getNodos()} #Para guardar los resultados de cada visita
         
-        self.toVisit:set = set(id for id, peso in self.repo.getNodos())
-        self.minimumDistances = {id:{'weight':maxsize, 'previous':None} for id, peso in self.repo.getNodos()}
-        self.minimumDistances[origin]['weight'] = 0
+        self.path[origin]['weight'] = 0
 
-        fun(origin, self.minimumDistances[origin]['weight'])
-        while(len(self.toVisit)):
+        func(origin)
+        while(len(self.toVisit)): #Investigacion de todos los nodos
             minKey = None
-            for key, value in self.minimumDistances.items():
-                if minKey == None and key in self.toVisit:
+            for key in self.toVisit:
+                if minKey == None:
                     minKey = key
-                if key in self.toVisit and value['weight'] < self.minimumDistances[minKey]['weight']:
-                    minKey = key
-            fun(minKey, self.minimumDistances[minKey]['weight'])
-        
-    def bestPath(self, destiny:int)->dict:
-        result = dict()
-        result[destiny] = self.minimumDistances[destiny]['weight']
-        while self.minimumDistances[list((result))[-1]]['previous'] is not None:
-            previousId = self.minimumDistances[list((result))[-1]]['previous']
-            result[previousId] = self.minimumDistances[previousId]['weight']
-        result = list(result.items())
-        result.reverse()
-        result = dict(result)
-        return result
+                    continue
+                if self.path[key]['weight'] < self.path[minKey]['weight']: minKey = key
+            func(minKey)
+        return self.path
+
+    def __path(self, destiny:int, path:dict)->dict:
+        bestPath = dict()
+        bestPath[destiny] = path[destiny]['weight']
+        while path[list((bestPath))[-1]]['previous'] is not None: #Se regresa desde el nodo destino hasta el origen
+            previousId = path[list((bestPath))[-1]]['previous'] 
+            bestPath[previousId] = path[previousId]['weight']
+        bestPath = list(bestPath.items()) #Se convierte el diccionario a una lista
+        bestPath.reverse() #Se le da la vuelta a la lista para que el origen sea la primer llave y el destino la ultima
+        bestPath = dict(bestPath)
+        return bestPath
+
+    #Mejor camnino en amplitud y mejor camino en peso
+    def bestPath(self, destiny:int)->tuple:
+        return (self.__path(destiny, self.amplitudPath), self.__path(destiny, self.weightPath))

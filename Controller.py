@@ -3,6 +3,8 @@ import sys
 from View import Ui_MainWindow
 from Repository import Repository
 from Busquedas import Busqueda
+import networkx as nx
+import matplotlib.pyplot as plt
 
 class searchingApp(QtWidgets.QMainWindow):
     def __init__(self, databaseName: str):
@@ -13,6 +15,7 @@ class searchingApp(QtWidgets.QMainWindow):
         #logic classes
         self.repository = Repository(databaseName)
         self.busqueda = Busqueda(self.repository)
+        self.Graph = nx.Graph()
 
         #buttons conections
         self.ui.CrearNodo.clicked.connect(self.crear)
@@ -30,6 +33,7 @@ class searchingApp(QtWidgets.QMainWindow):
         #update data
         self.retrieveData()
 
+    #funcionalidades del sistema
     def crear(self):
         nombre = self.ui.Nombre.text()
         if self.repository.buscarExistenciaPorNombre(nombre): return
@@ -82,24 +86,32 @@ class searchingApp(QtWidgets.QMainWindow):
     def buscar(self):
         origin = self.repository.getId(self.ui.NodoInicial.currentText())
         destiny = self.repository.getId(self.ui.NodoObjetivo.currentText())
-        self.busqueda.Explore(0, origin)
-        Amplitud = self.busqueda.bestPath(destiny)
-        self.busqueda.Explore(1, origin)
-        Pesos = self.busqueda.bestPath(destiny)
+        self.busqueda.evaluate(origin)
+        self.Amplitud, self.Peso = self.busqueda.bestPath(destiny)
+
         self.ui.BusquedaMovimientos.clear()
         self.ui.BusquedaPesos.clear()
-        for id, peso in Amplitud.items():
+        
+        for id, peso in self.Amplitud.items():
             name = f"{self.repository.getName(id)}:{peso}-->"
             self.ui.BusquedaMovimientos.setText(self.ui.BusquedaMovimientos.text()+name)
-        for id, peso in Pesos.items():
+        for id, peso in self.Peso.items():
             name = f"{self.repository.getName(id)}:{peso}-->"
             self.ui.BusquedaPesos.setText(self.ui.BusquedaPesos.text()+name)
+        
 
+    def showGraph(self,  Ruta:dict):
+        for id, name in self.repository.getNodos():
+            pass
+        plt.show()
+        
+
+    #Actualizacion desde controlador
     def updateTableConexiones(self, item:tuple):
         last: int = self.ui.TablaConexiones.rowCount()
         self.ui.TablaConexiones.setRowCount(last+1)
-        self.ui.TablaConexiones.setItem(last, 0, QtWidgets.QTableWidgetItem(str(item[0]))) #id origin
-        self.ui.TablaConexiones.setItem(last, 1, QtWidgets.QTableWidgetItem(str(item[1]))) #id desitny
+        self.ui.TablaConexiones.setItem(last, 0, QtWidgets.QTableWidgetItem(self.repository.getName(item[0]))) #id origin
+        self.ui.TablaConexiones.setItem(last, 1, QtWidgets.QTableWidgetItem(self.repository.getName(item[1]))) #id desitny
         self.ui.TablaConexiones.setItem(last, 2, QtWidgets.QTableWidgetItem(str(item[2]))) #peso
 
     def updateTableNodos(self, item:tuple):
@@ -119,6 +131,7 @@ class searchingApp(QtWidgets.QMainWindow):
         self.ui.NodoInicial.addItem(name)
         self.ui.NodoObjetivo.addItem(name)
     
+    #Actualizacion desde base de datos
     def refreshNodes(self):
         self.ui.TablaNodos.clear()
         self.ui.TablaNodos.setRowCount(0)
@@ -133,9 +146,11 @@ class searchingApp(QtWidgets.QMainWindow):
         self.ui.NodoInicial.clear()
         self.ui.NodoObjetivo.clear()
 
-        for nodo in self.repository.getNodos():
-            self.updateNodesComboBox(nodo[1])
-            self.updateTableNodos(nodo)
+        for row, (id, nombre) in enumerate(self.repository.getNodos()):
+            self.updateNodesComboBox(nombre)
+            self.ui.TablaNodos.setRowCount(row+1)
+            self.ui.TablaNodos.setItem(row, 0, QtWidgets.QTableWidgetItem(str(id)))
+            self.ui.TablaNodos.setItem(row, 1, QtWidgets.QTableWidgetItem(nombre))
 
         self.ui.TablaNodos.setHorizontalHeaderItem(0, QtWidgets.QTableWidgetItem("ID"))
         self.ui.TablaNodos.setHorizontalHeaderItem(1, QtWidgets.QTableWidgetItem("Nombre"))
@@ -144,13 +159,17 @@ class searchingApp(QtWidgets.QMainWindow):
         self.ui.TablaConexiones.clear()
         self.ui.TablaConexiones.setRowCount(0)
 
-        for conexion in self.repository.getConexiones():
-            self.updateTableConexiones(conexion)
+        for row, (name1, name2, peso) in enumerate(self.repository.getConexionesNombres()):
+            self.ui.TablaConexiones.setRowCount(row+1)
+            self.ui.TablaConexiones.setItem(row, 0, QtWidgets.QTableWidgetItem(name1))
+            self.ui.TablaConexiones.setItem(row, 1, QtWidgets.QTableWidgetItem(name2))
+            self.ui.TablaConexiones.setItem(row, 2, QtWidgets.QTableWidgetItem(str(peso)))
         
         self.ui.TablaConexiones.setHorizontalHeaderItem(0, QtWidgets.QTableWidgetItem("Nodo 1"))
         self.ui.TablaConexiones.setHorizontalHeaderItem(1, QtWidgets.QTableWidgetItem("Nodo 2"))
         self.ui.TablaConexiones.setHorizontalHeaderItem(2, QtWidgets.QTableWidgetItem("Peso"))
 
+    #Actualizacion completa
     def retrieveData(self):
         self.refreshNodes()
         self.refreshConexiones()

@@ -10,6 +10,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
+    #conexion de validadores y vista
     def initializeEditTab(self):
         self.CrearNodo.setEnabled(False)
         self.CambiarNombre.setEnabled(False)
@@ -39,6 +40,7 @@ class Ui_MainWindow(object):
         self.NodoInicial.currentTextChanged.connect(self.__searchActive)
         self.NodoObjetivo.currentTextChanged.connect(self.__searchActive)
         
+    #Configuracion de validadores por el lado de la vista
     def __createActive(self):
         if len(self.Nombre.text()):
             self.CrearNodo.setEnabled(True)
@@ -81,6 +83,7 @@ class Ui_MainWindow(object):
         else:
             self.Buscar.setEnabled(False)
 
+    #Ventana
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1059, 742)
