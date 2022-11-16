@@ -113,7 +113,8 @@ class searchingApp(QtWidgets.QMainWindow):
             WeightG.add_edge(nombre1, nombre2, weight=peso)
         pos = nx.spring_layout(AmplitudG)
         #Amplitud subplot
-        plt.subplot(121)
+        amplitudPlt = plt.subplot(121)
+        amplitudPlt.title.set_text("Mejor camino en amplitud")
         #nodos
         nx.draw_networkx_nodes(AmplitudG, pos, nodelist=nodes-set(self.Amplitud.keys()), node_size=1500)
         nx.draw_networkx_nodes(AmplitudG, pos, nodelist=self.Amplitud.keys(), node_size=1500, node_color="red")
@@ -123,7 +124,8 @@ class searchingApp(QtWidgets.QMainWindow):
         edge_labels = nx.get_edge_attributes(AmplitudG, "weight")
         nx.draw_networkx_edge_labels(AmplitudG, pos, edge_labels)
         #Weight subplot
-        plt.subplot(122)
+        weightPlt = plt.subplot(122)
+        weightPlt.title.set_text("Mejor camino en peso")
         #nodos
         nx.draw_networkx_nodes(WeightG, pos, nodelist=nodes-set(self.Peso.keys()), node_size=1500)
         nx.draw_networkx_nodes(WeightG, pos, nodelist=self.Peso.keys(), node_size=1500, node_color="red")

@@ -9,8 +9,9 @@ class Busqueda:
         self.weightPath = dict()
 
     def evaluate(self, origin:int):
-        self.amplitudPath =  self.__Explore(origin, self.__visitA)
-        self.weightPath = self.__Explore(origin, self.__visitP)
+        self.origin = origin
+        self.amplitudPath =  self.__Explore(self.__visitA)
+        self.weightPath = self.__Explore(self.__visitP)
 
     def __visitA(self, id:int):
         self.toVisit.remove(id) #Se marca como visitado
@@ -30,13 +31,13 @@ class Busqueda:
                 self.path[nextId]['weight'] = level+peso
                 self.path[nextId]['previous'] = id
 
-    def __Explore(self, origin:int, func):
+    def __Explore(self, func):
         self.toVisit:set = set(id for id, peso in self.repo.getNodos()) #Control para evitar bucles
         self.path = {id:{'weight':maxsize, 'previous':None} for id, peso in self.repo.getNodos()} #Para guardar los resultados de cada visita
         
-        self.path[origin]['weight'] = 0
+        self.path[self.origin]['weight'] = 0
 
-        func(origin)
+        func(self.origin)
         while(len(self.toVisit)): #Investigacion de todos los nodos
             minKey = None
             for key in self.toVisit:
@@ -47,7 +48,7 @@ class Busqueda:
             func(minKey)
         return self.path
 
-    def __path(self, destiny:int, path:dict)->dict:
+    def __bestPath(self, destiny:int, path:dict)->dict:
         bestPathId = [destiny]
         while path[bestPathId[-1]]['previous'] is not None: #Se regresa desde el nodo destino hasta el origen
             bestPathId.append(path[bestPathId[-1]]['previous'])
@@ -64,4 +65,4 @@ class Busqueda:
 
     #Mejor camnino en amplitud y mejor camino en peso
     def bestPath(self, destiny:int)->tuple:
-        return (self.__path(destiny, self.amplitudPath), self.__path(destiny, self.weightPath))
+        return (self.__bestPath(destiny, self.amplitudPath), self.__bestPath(destiny, self.weightPath))

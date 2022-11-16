@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'Interfaz'
+# Form implementation generated from reading ui file 'Interfaz.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.0
 #
@@ -87,6 +87,8 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1059, 742)
+        icon = QtGui.QIcon.fromTheme("go-last")
+        MainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -357,17 +359,6 @@ class Ui_MainWindow(object):
         self.BusquedaMovimientos.setObjectName("BusquedaMovimientos")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.FieldRole, self.BusquedaMovimientos)
         self.gridLayout_5.addWidget(self.frame_busqueda, 0, 0, 1, 1)
-        self.frame_5 = QtWidgets.QFrame(self.tab_2)
-        self.frame_5.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
-        self.frame_5.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
-        self.frame_5.setObjectName("frame_5")
-        self.gridLayout_12 = QtWidgets.QGridLayout(self.frame_5)
-        self.gridLayout_12.setObjectName("gridLayout_12")
-        self.ArbolDeBusqueda = QtWidgets.QTreeWidget(self.frame_5)
-        self.ArbolDeBusqueda.setObjectName("ArbolDeBusqueda")
-        self.ArbolDeBusqueda.headerItem().setText(0, "1")
-        self.gridLayout_12.addWidget(self.ArbolDeBusqueda, 0, 0, 1, 1)
-        self.gridLayout_5.addWidget(self.frame_5, 1, 0, 1, 1)
         self.tabWidget.addTab(self.tab_2, "")
         self.gridLayout.addWidget(self.tabWidget, 0, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -385,7 +376,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Busqueda del mejor camino"))
         self.ConectarNodos.setText(_translate("MainWindow", "Conectar"))
         self.label_3.setText(_translate("MainWindow", "Peso"))
         self.label.setText(_translate("MainWindow", "Nodo X"))
@@ -426,6 +417,3 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Objetivo"))
         self.Buscar.setText(_translate("MainWindow", "Buscar"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Buscar"))
-        self.initializeEditTab()
-        self.initializeDeleteTab()
-        self.initializeSearchTab()

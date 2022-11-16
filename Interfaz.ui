@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Busqueda del mejor camino</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="go-last"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -471,27 +474,6 @@ Esta opcion elminara todos los nodos y sus conexiones pero no reiniciara los id'
              <property name="text">
               <string/>
              </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QFrame" name="frame_5">
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_12">
-           <item row="0" column="0">
-            <widget class="QTreeWidget" name="ArbolDeBusqueda">
-             <column>
-              <property name="text">
-               <string notr="true">1</string>
-              </property>
-             </column>
             </widget>
            </item>
           </layout>
