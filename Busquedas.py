@@ -48,14 +48,18 @@ class Busqueda:
         return self.path
 
     def __path(self, destiny:int, path:dict)->dict:
+        bestPathId = [destiny]
+        while path[bestPathId[-1]]['previous'] is not None: #Se regresa desde el nodo destino hasta el origen
+            bestPathId.append(path[bestPathId[-1]]['previous'])
+        bestPathId.reverse()
+
         bestPath = dict()
-        bestPath[destiny] = path[destiny]['weight']
-        while path[list((bestPath))[-1]]['previous'] is not None: #Se regresa desde el nodo destino hasta el origen
-            previousId = path[list((bestPath))[-1]]['previous'] 
-            bestPath[previousId] = path[previousId]['weight']
-        bestPath = list(bestPath.items()) #Se convierte el diccionario a una lista
-        bestPath.reverse() #Se le da la vuelta a la lista para que el origen sea la primer llave y el destino la ultima
-        bestPath = dict(bestPath)
+        try:
+            while(True):
+                id = bestPathId.pop(0)
+                bestPath[self.repo.getName(id)] = path[id]['weight']
+        except:
+            pass
         return bestPath
 
     #Mejor camnino en amplitud y mejor camino en peso

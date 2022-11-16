@@ -92,17 +92,46 @@ class searchingApp(QtWidgets.QMainWindow):
         self.ui.BusquedaMovimientos.clear()
         self.ui.BusquedaPesos.clear()
         
-        for id, peso in self.Amplitud.items():
-            name = f"{self.repository.getName(id)}:{peso}-->"
+        for name, peso in self.Amplitud.items():
+            name = f"{name}:{peso}-->"
             self.ui.BusquedaMovimientos.setText(self.ui.BusquedaMovimientos.text()+name)
-        for id, peso in self.Peso.items():
-            name = f"{self.repository.getName(id)}:{peso}-->"
+        for name, peso in self.Peso.items():
+            name = f"{name}:{peso}-->"
             self.ui.BusquedaPesos.setText(self.ui.BusquedaPesos.text()+name)
-        
+        self.showGraph()
 
-    def showGraph(self,  Ruta:dict):
+    def showGraph(self):
+        AmplitudG = nx.Graph()
+        WeightG = nx.Graph()
+        nodes = set()
         for id, name in self.repository.getNodos():
-            pass
+            AmplitudG.add_node(name)
+            WeightG.add_node(name)
+            nodes.add(name)
+        for nombre1, nombre2, peso in self.repository.getConexionesNombres():
+            AmplitudG.add_edge(nombre1, nombre2, weight=peso)
+            WeightG.add_edge(nombre1, nombre2, weight=peso)
+        pos = nx.spring_layout(AmplitudG)
+        #Amplitud subplot
+        plt.subplot(121)
+        #nodos
+        nx.draw_networkx_nodes(AmplitudG, pos, nodelist=nodes-set(self.Amplitud.keys()), node_size=1500)
+        nx.draw_networkx_nodes(AmplitudG, pos, nodelist=self.Amplitud.keys(), node_size=1500, node_color="red")
+        nx.draw_networkx_labels(AmplitudG, pos)
+        #conexiones
+        nx.draw_networkx_edges(AmplitudG, pos)
+        edge_labels = nx.get_edge_attributes(AmplitudG, "weight")
+        nx.draw_networkx_edge_labels(AmplitudG, pos, edge_labels)
+        #Weight subplot
+        plt.subplot(122)
+        #nodos
+        nx.draw_networkx_nodes(WeightG, pos, nodelist=nodes-set(self.Peso.keys()), node_size=1500)
+        nx.draw_networkx_nodes(WeightG, pos, nodelist=self.Peso.keys(), node_size=1500, node_color="red")
+        nx.draw_networkx_labels(WeightG, pos)
+        #conexiones
+        nx.draw_networkx_edges(WeightG, pos)
+        edge_labels = nx.get_edge_attributes(WeightG, "weight")
+        nx.draw_networkx_edge_labels(WeightG, pos, edge_labels)
         plt.show()
         
 
