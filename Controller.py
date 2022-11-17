@@ -21,6 +21,7 @@ class searchingApp(QtWidgets.QMainWindow):
         self.ui.CrearNodo.clicked.connect(self.crear)
         self.ui.CambiarNombre.clicked.connect(self.cambiarNombre)
         self.ui.ConectarNodos.clicked.connect(self.conectar)
+        self.ui.MostrarGrafo.clicked.connect(self.mostrarGrafo)
         
         self.ui.EliminarNodo.clicked.connect(self.eliminar)
         self.ui.DesconectarNodos.clicked.connect(self.desconectar)
@@ -59,6 +60,21 @@ class searchingApp(QtWidgets.QMainWindow):
         self.repository.conectar(origen, destino, peso)
         self.updateTableConexiones((origen, destino, peso))
     
+    def mostrarGrafo(self):
+        G = nx.Graph()
+        for id, name in self.repository.getNodos():
+            G.add_node(name)
+        for name1, name2, peso in self.repository.getConexionesNombres():
+            G.add_edge(name1, name2, weight=peso)
+        pos = nx.spring_layout(G)
+        nx.draw_networkx_nodes(G, pos, node_size=1500)
+        nx.draw_networkx_labels(G, pos)
+        nx.draw_networkx_edges(G, pos)
+        edge_labels = nx.get_edge_attributes(G, "weight")
+        nx.draw_networkx_edge_labels(G, pos, edge_labels)
+        plt.title("Grafo de conexiones")
+        plt.show()
+
     def eliminar(self):
         id = self.repository.getId(self.ui.NodoEliminar.currentText())
         self.repository.eliminarNodo(id)
@@ -86,7 +102,7 @@ class searchingApp(QtWidgets.QMainWindow):
     def buscar(self):
         origin = self.repository.getId(self.ui.NodoInicial.currentText())
         destiny = self.repository.getId(self.ui.NodoObjetivo.currentText())
-        self.busqueda.evaluate(origin)
+        if not self.busqueda.origin == origin: self.busqueda.evaluate(origin)
         self.Amplitud, self.Peso = self.busqueda.bestPath(destiny)
 
         self.ui.BusquedaMovimientos.clear()

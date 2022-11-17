@@ -14,14 +14,15 @@
    <string>Busqueda del mejor camino</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="go-last"/>
+   <iconset theme="go-last">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="1">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -31,6 +32,45 @@
         <string>Editar Nodos</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_6">
+        <item row="1" column="0">
+         <widget class="QFrame" name="frame_4">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_11">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_15">
+             <property name="text">
+              <string>Nombre original</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="NuevoNombre"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_16">
+             <property name="text">
+              <string>Nuevo Nombre</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QPushButton" name="CambiarNombre">
+             <property name="text">
+              <string>Cambiar</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="2">
+            <widget class="QComboBox" name="NodoCambioNombre"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
         <item row="2" column="0">
          <widget class="QFrame" name="frame_connect">
           <property name="frameShape">
@@ -80,6 +120,35 @@
           </layout>
          </widget>
         </item>
+        <item row="0" column="0">
+         <widget class="QFrame" name="frame_creacion">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="Nombre"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Nombre del nodo</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="CrearNodo">
+             <property name="text">
+              <string>Crear</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
         <item row="3" column="0">
          <widget class="QFrame" name="frame_info">
           <property name="frameShape">
@@ -125,72 +194,11 @@
           </layout>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QFrame" name="frame_creacion">
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
+        <item row="4" column="0">
+         <widget class="QPushButton" name="MostrarGrafo">
+          <property name="text">
+           <string>Mostrar grafo</string>
           </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="Nombre"/>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_4">
-             <property name="text">
-              <string>Nombre del nodo</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QPushButton" name="CrearNodo">
-             <property name="text">
-              <string>Crear</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QFrame" name="frame_4">
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_11">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_15">
-             <property name="text">
-              <string>Nombre original</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="NuevoNombre"/>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_16">
-             <property name="text">
-              <string>Nuevo Nombre</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QPushButton" name="CambiarNombre">
-             <property name="text">
-              <string>Cambiar</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1" colspan="2">
-            <widget class="QComboBox" name="NodoCambioNombre"/>
-           </item>
-          </layout>
          </widget>
         </item>
        </layout>

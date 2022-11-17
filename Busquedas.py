@@ -7,6 +7,7 @@ class Busqueda:
         self.repo = repo
         self.amplitudPath = dict()
         self.weightPath = dict()
+        self.origin = None
 
     def evaluate(self, origin:int):
         self.origin = origin
