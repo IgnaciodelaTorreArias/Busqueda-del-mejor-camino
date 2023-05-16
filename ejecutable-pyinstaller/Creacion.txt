@@ -1,0 +1,8 @@
+python -m venv env
+.\env\Scripts\activate
+pip install --upgrade pip
+pip install -r .\requisitos.txt
+pip install pyinstaller
+pyinstaller --noconfirm --onefile --windowed --icon "$(pwd)/path.ico" --name "busqueda del mejor camino"  "$(pwd)/__init__.py"
+
+# El ejecutable generado, no sera capaz de mostrar los grafos

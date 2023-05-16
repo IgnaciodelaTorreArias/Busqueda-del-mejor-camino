@@ -1,0 +1,12 @@
+docker run --name APP -it appimagecrafters/appimage-builder
+docker cp . APP:/home
+
+(dentro de la maquina)
+apt-get update
+apt-get install python3.7 -y
+python3.7 -m pip install --upgrade pip
+python3.7 -m pip install --ignore-installed --prefix=/usr --root=AppDir -r ./requisitos.txt
+appimage-builder --recipe AppImageBuilder.yml --skip-test
+
+(fuera de la maquina)
+docker cp APP:/home/'busqueda de caminos-1.0.0-x86_64.AppImage' .
